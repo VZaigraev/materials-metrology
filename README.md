@@ -1,5 +1,4 @@
 # materials-metrology
-Repository for UNN course "Informational technologies in decision making"
 Ссылкки на папки в гугл диске:
 1)папка "Готовое"
 https://drive.google.com/open?id=19REb3f_O-BG2UwApS4ZHVuDxRDk8yiRQ
