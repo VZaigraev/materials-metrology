@@ -1,4 +1,5 @@
 import logging
+import os
 from abc import ABC, abstractmethod
 from PIL import Image, ImageDraw, ImageFilter
 from random import randint
@@ -17,6 +18,12 @@ class AbstractGenerator(ABC):
         self.image = None
         self.width = width
         self.height = height
+
+        if not os.path.isdir('images'):
+            os.mkdir('images')
+
+        if not os.path.isdir('coordinates'):
+            os.mkdir('coordinates')
 
     @abstractmethod
     def generate(self):
@@ -97,11 +104,3 @@ class StochasticGenerator(AbstractGenerator):
         self.image.show()
 
         StochasticGenerator.imageCounter += 1
-
-
-s = StochasticGenerator(particles=500, maxDeltaParticles=150, radius=7, maxDeltaRadius=5, width=800, height=600)
-s.generate()
-s.generate()
-s.generate()
-
-print(s.particlesCount)
