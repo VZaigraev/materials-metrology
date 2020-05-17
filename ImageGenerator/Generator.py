@@ -6,7 +6,7 @@ from random import randint
 
 
 class AbstractGenerator(ABC):
-    logging.basicConfig(filename="logs/gen.log", level=logging.INFO)
+    logging.basicConfig(filename="ImageGenerator/logs/gen.log", level=logging.INFO)
     NOISE_FACTOR = 70
 
     def __init__(self, particles, maxDeltaParticles, radius, maxDeltaRadius, width, height):
@@ -19,11 +19,11 @@ class AbstractGenerator(ABC):
         self.width = width
         self.height = height
 
-        if not os.path.isdir('images'):
-            os.mkdir('images')
+        if not os.path.isdir('ImageGenerator/images'):
+            os.mkdir('ImageGenerator/images')
 
-        if not os.path.isdir('coordinates'):
-            os.mkdir('coordinates')
+        if not os.path.isdir('ImageGenerator/coordinates'):
+            os.mkdir('ImageGenerator/coordinates')
 
     @abstractmethod
     def generate(self):
@@ -68,7 +68,7 @@ class StochasticGenerator(AbstractGenerator):
         self.particlesCount = self.particles + randint(-self.maxDeltaParticles, self.maxDeltaParticles)
         self.image = Image.new('RGBA', (self.width, self.height), color='Black')
         idraw = ImageDraw.Draw(self.image)
-        file = open('coordinates/s' + str(StochasticGenerator.imageCounter) + '.txt', 'w')
+        file = open('ImageGenerator/coordinates/s' + str(StochasticGenerator.imageCounter) + '.csv', 'w')
 
         for i in range(self.particlesCount):
             x = randint(0, self.width)
@@ -93,14 +93,14 @@ class StochasticGenerator(AbstractGenerator):
             if bottom_right_Y > self.height:
                 bottom_right_Y = self.height
 
-            file.write(str((upper_left_X, upper_left_Y, bottom_right_X, bottom_right_Y)) + '\n')
+            file.write(str(upper_left_X) + ',' + str(upper_left_Y) + ',' + str(bottom_right_X) + ',' + str(
+                bottom_right_Y) + '\n')
 
         file.close()
         self.image = self.image.filter(ImageFilter.BLUR)
         pix = self.image.load()
         idraw = ImageDraw.Draw(self.image)
         AbstractGenerator.createNoise(pix, self.width, self.height, idraw, AbstractGenerator.NOISE_FACTOR)
-        self.image.save('images/s' + str(StochasticGenerator.imageCounter) + '.png', 'PNG')
-        self.image.show()
+        self.image.save('ImageGenerator/images/s' + str(StochasticGenerator.imageCounter) + '.png', 'PNG')
 
         StochasticGenerator.imageCounter += 1
