@@ -3,6 +3,7 @@ import os
 from abc import ABC, abstractmethod
 from PIL import Image, ImageDraw, ImageFilter
 from random import randint
+import pandas as pd
 
 
 class AbstractGenerator(ABC):
@@ -68,7 +69,7 @@ class StochasticGenerator(AbstractGenerator):
         self.particlesCount = self.particles + randint(-self.maxDeltaParticles, self.maxDeltaParticles)
         self.image = Image.new('RGBA', (self.width, self.height), color='Black')
         idraw = ImageDraw.Draw(self.image)
-        file = open('ImageGenerator/coordinates/s' + str(StochasticGenerator.imageCounter) + '.csv', 'w')
+        file = pd.DataFrame()
 
         for i in range(self.particlesCount):
             x = randint(0, self.width)
@@ -92,11 +93,10 @@ class StochasticGenerator(AbstractGenerator):
                 bottom_right_X = self.width
             if bottom_right_Y > self.height:
                 bottom_right_Y = self.height
+            file = file.append({"ax": upper_left_X, "ay":upper_left_Y, "bx":bottom_right_X, "by":bottom_right_Y}, ignore_index=True)
 
-            file.write(str(upper_left_X) + ',' + str(upper_left_Y) + ',' + str(bottom_right_X) + ',' + str(
-                bottom_right_Y) + '\n')
-
-        file.close()
+        file.to_csv('ImageGenerator/coordinates/s' + str(StochasticGenerator.imageCounter) + '.csv',
+                    index=False)
         self.image = self.image.filter(ImageFilter.BLUR)
         pix = self.image.load()
         idraw = ImageDraw.Draw(self.image)
