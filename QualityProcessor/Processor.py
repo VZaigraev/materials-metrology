@@ -38,12 +38,14 @@ def averagePrecision(recall, precision):
 
 
 def iouBatch(pred:np.ndarray, truth:np.ndarray):
-    truePositives = np.zeros(truth.shape[0])
+    truePositives = np.zeros(pred.shape[0])
+    truth_checked = []
     for i in range(pred.shape[0]):
         iouRes = iouRow(pred[i], truth)
         maxIouInd = np.argmax(iouRes)
-        if truePositives[maxIouInd] == 0 and iouRes[maxIouInd] > 0.5:
-            truePositives[maxIouInd] = 1
+        if maxIouInd not in truth_checked and iouRes[maxIouInd] > 0.5:
+            truePositives[i] = 1
+            truth_checked.append(maxIouInd)
     return truePositives
 
 def iouRow(pred:np.ndarray, truth:np.ndarray):
