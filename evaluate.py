@@ -1,6 +1,6 @@
 import sys
 import argparse
-from Evaluator.Evaluator import evaluateLOG, evaluateDOG, evaluateDOH, evaluatebatch
+from Evaluator.Evaluator import evaluateLOG, evaluateDOG, evaluateDOH, evaluateHough, evaluatebatch
 from Loader.Loader import load_csv, load_xml
 from QualityProcessor.Processor import meanAveragePrecision
 import cv2
@@ -15,7 +15,8 @@ def createParser():
     parser.add_argument('draw', type=bool, default=False)
     return parser
 
-def draw(img, truth, pred, name):
+def draw(src_img, truth, pred, name):
+    img = src_img.copy()
     dir = f"./{name}-res"
     if not os.path.exists(dir):
         os.mkdir(dir)
@@ -49,4 +50,6 @@ if __name__ == '__main__':
     process(truth, img, "LOG", evaluateLOG)
     process(truth, img, "DOG", evaluateDOG)
     process(truth, img, "DOH", evaluateDOH)
+    process(truth, img, "hough", evaluateHough)
+
 
