@@ -24,8 +24,7 @@ public class Menu extends JFrame {
     String calculatedScale = "\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|";
     double scaleValue;
 
-    // specify file for object detection algorithm
-    private static final String CMD_COMMAND = "python_exec_file.py";
+    private static StringBuilder CMD_COMMAND = new StringBuilder("python ./process.py");
 
     public Menu(String title) {
         super(title);
@@ -105,6 +104,7 @@ public class Menu extends JFrame {
                 if (image == null || image.isEmpty()) {
                     return;
                 }
+                CMD_COMMAND.append(" ").append(image);
                 imagePanel.add(label);
                 imagePanel.updateUI();
                 scaleButton.setEnabled(true);
@@ -136,10 +136,10 @@ public class Menu extends JFrame {
 
             if (event.getSource() == processButton) {
                 ProcessBuilder processBuilder = new ProcessBuilder();
-                processBuilder.command("cmd.exe", "/c", CMD_COMMAND);
+                processBuilder.command("cmd.exe", "/c", CMD_COMMAND.toString());
                 try {
                     Process process = processBuilder.start();
-                    JOptionPane.showMessageDialog(menu, "status: finished", "info", JOptionPane.INFORMATION_MESSAGE, null);
+                    JOptionPane.showMessageDialog(menu, "status: finished\n" + CMD_COMMAND.toString(), "info", JOptionPane.INFORMATION_MESSAGE, null);
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
