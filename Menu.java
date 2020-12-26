@@ -24,7 +24,7 @@ public class Menu extends JFrame {
     String calculatedScale = "\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|";
     double scaleValue;
 
-    private static StringBuilder CMD_COMMAND = new StringBuilder("python ./process.py");
+    private static StringBuilder CMD_COMMAND;
 
     public Menu(String title) {
         super(title);
@@ -104,7 +104,7 @@ public class Menu extends JFrame {
                 if (image == null || image.isEmpty()) {
                     return;
                 }
-                CMD_COMMAND.append(" ").append(image);
+                CMD_COMMAND = new StringBuilder("python ./process.py").append(" ").append(image);
                 imagePanel.add(label);
                 imagePanel.updateUI();
                 scaleButton.setEnabled(true);
@@ -157,7 +157,7 @@ public class Menu extends JFrame {
             try {
                 image = ImageIO.read(new File(path));
             } catch (IOException ex) {
-                ex.printStackTrace();
+
             }
         }
 
